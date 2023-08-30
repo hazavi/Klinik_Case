@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lægeklinik.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,28 +9,30 @@ namespace Lægeklinik.Codes
 {
     internal class Patient : Person
     {
-        public string Telefonnummer { get; }
-        public List<Læge> TildelteLæger { get; }
+        public List<Læge> TildelteLæger { get; } = new List<Læge>();
 
-        public Patient(string fornavn, string efternavn, string telefonnummer)
-            : base(fornavn, efternavn)
+        public Patient(string fornavn, string efternavn, int tlfnr) : base(fornavn, efternavn, tlfnr)
         {
-            Telefonnummer = telefonnummer;
             TildelteLæger = new List<Læge>();
         }
-
         public void TildelLæge(Læge læge)
         {
-            // Implementer logik for at tildele læge til patient og håndtere begrænsninger
+            // Tjek for kombinationen af Kirurgi og Onkologi
+            if (TildelteLæger.Exists(l => l.Specialitet == "Kirurgi" || l.Specialitet == "Onkologi") &&
+                (læge.Specialitet == "Kirurgi" || læge.Specialitet == "Onkologi"))
+            {
+                throw new Exception("Advarsel: En patient kan ikke have Kirurgi og Onkologi samtidig.");
+            }
+
+            // Tjek antallet af patienter tildelt lægen
+            if (TildelteLæger.Count >= 3)
+            {
+                throw new Exception("Advarsel: Lægen har allerede 3 eller flere patienter.");
+            }
+
+            TildelteLæger.Add(læge);
         }
 
-        public override void ShowInfo()
-        {
-            Console.WriteLine($"Patient: {Fornavn} {Efternavn}, Tlf.nr.: {Telefonnummer}");
-            foreach (var læge in TildelteLæger)
-            {
-                læge.ShowInfo();
-            }
-        }
+     
     }
 }

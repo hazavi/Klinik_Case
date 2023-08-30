@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lægeklinik.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,21 +7,14 @@ using System.Threading.Tasks;
 
 namespace Lægeklinik.Codes
 {
-    internal class Læge : Person
+    internal class Læge : Person, IPerson
     {
-        public string Telefonnummer { get; }
         public string Specialitet { get; }
 
-        public Læge(string fornavn, string efternavn, string telefonnummer, string specialitet)
-            : base(fornavn, efternavn)
+        public Læge(string fornavn, string efternavn, int tlfnr, string specialitet) : base (fornavn, efternavn, tlfnr)
         {
-            Telefonnummer = telefonnummer;
             Specialitet = specialitet;
         }
-
-        public override void ShowInfo()
-        {
-            Console.WriteLine($"Læge: {Fornavn} {Efternavn}, Specialitet: {Specialitet}, Tlf.nr.: {Telefonnummer}");
-        }
+            
     }
 }
